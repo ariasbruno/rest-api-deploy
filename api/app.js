@@ -7,28 +7,28 @@ const { validateMovie, validatePartialMovie } = require("../schemas/movies");
 
 const app = express();
 app.use(express.json());
-app.use(cors()
-  // cors({
-  //   origin: (origin, callback) => {
-  //     const ACCEPTED_ORIGINS = [
-  //       "http://localhost:8000",
-  //       "http://localhost:8080",
-  //       "http://web.com",
-  //       "http://web2.com",
-  //       "http://google.com",
-  //     ];
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      const ACCEPTED_ORIGINS = [
+        "http://localhost:8000",
+        "http://localhost:8080",
+        "http://web.com",
+        "http://web2.com",
+        "http://google.com",
+      ];
 
-  //     if (ACCEPTED_ORIGINS.includes(origin)) {
-  //       return callback(null, true);
-  //     }
+      if (ACCEPTED_ORIGINS.includes(origin)) {
+        return callback(null, true);
+      }
 
-  //     if (!origin) {
-  //       return callback(null, true);
-  //     }
+      if (!origin) {
+        return callback(null, true);
+      }
 
-  //     return callback(new Error("Not allowed by CORS"));
-  //   },
-  // })
+      return callback(new Error("Not allowed by CORS"));
+    },
+  })
 );
 app.disable("x-powered-by");
 
