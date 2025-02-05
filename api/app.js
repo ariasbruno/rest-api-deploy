@@ -7,28 +7,28 @@ const { validateMovie, validatePartialMovie } = require("../schemas/movies");
 
 const app = express();
 app.use(express.json());
-app.use(
-  cors({
-    origin: (origin, callback) => {
-      const ACCEPTED_ORIGINS = [
-        "http://localhost:8000",
-        "http://localhost:8080",
-        "http://web.com",
-        "http://web2.com",
-        "http://google.com",
-      ];
+app.use(cors()
+  // cors({
+  //   origin: (origin, callback) => {
+  //     const ACCEPTED_ORIGINS = [
+  //       "http://localhost:8000",
+  //       "http://localhost:8080",
+  //       "http://web.com",
+  //       "http://web2.com",
+  //       "http://google.com",
+  //     ];
 
-      if (ACCEPTED_ORIGINS.includes(origin)) {
-        return callback(null, true);
-      }
+  //     if (ACCEPTED_ORIGINS.includes(origin)) {
+  //       return callback(null, true);
+  //     }
 
-      if (!origin) {
-        return callback(null, true);
-      }
+  //     if (!origin) {
+  //       return callback(null, true);
+  //     }
 
-      return callback(new Error("Not allowed by CORS"));
-    },
-  })
+  //     return callback(new Error("Not allowed by CORS"));
+  //   },
+  // })
 );
 app.disable("x-powered-by");
 
@@ -64,17 +64,17 @@ app.post("/movies", (req, res) => {
   const result = validateMovie(req.body);
 
   if (result.error) {
-    // o if (!result.success)
+
     return res.status(400).json({ error: JSON.parse(result.error.message) });
   }
   const newMovie = {
-    id: crypto.randomUUID(), // uuid v4
+    id: crypto.randomUUID(),
     ...result.data,
   };
-  // Esto no seria rest porque estamos guardando el estado de la aplicación en memoria
+
   movies.push(newMovie);
 
-  res.status(201).json(newMovie); // .json(newMovie) para actualiza la cache del cliente
+  res.status(201).json(newMovie);
 });
 
 app.patch("/movies/:id", (req, res) => {
@@ -129,11 +129,5 @@ app.options("/movies/:id", (req, res) => {
 
   res.send();
 });
-
-const PORT = process.env.PORT ?? 1234;
-
-// app.listen(PORT, () => {
-//   console.log(`Server listening on port http://localhost:${PORT}`);
-// });
 
 module.exports = app;
